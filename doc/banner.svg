@@ -34,6 +34,6 @@
   </g>
 
   <!-- Wordmark, bottom-left -->
-  <text x="64" y="308" font-family="Menlo" font-size="64" font-weight="bold" fill="#E2E8F0">simdjson</text>
+  <text x="64" y="308" font-family="Menlo" font-size="64" font-weight="bold" fill="#E2E8F0">simdjson_dart</text>
   <text x="64" y="352" font-family="Menlo" font-size="24" fill="#94A3B8">Fast JSON for Dart &#183; simdjson C++ over FFI</text>
 </svg>

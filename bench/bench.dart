@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:simdjson/simdjson.dart';
+import 'package:simdjson_dart/simdjson_dart.dart';
 
 void main() {
   final workloads = <String, (String, List<String>)>{

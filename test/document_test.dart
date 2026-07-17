@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:simdjson/simdjson.dart';
+import 'package:simdjson_dart/simdjson_dart.dart';
 import 'package:test/test.dart';
 
 void main() {

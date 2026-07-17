@@ -1,6 +1,6 @@
 ![simdjson: fast JSON for Dart](doc/banner.png)
 
-# simdjson
+# simdjson_dart
 
 Fast JSON for Dart, powered by the [simdjson](https://simdjson.org) C++
 library over FFI. The native code is compiled automatically at build
@@ -15,7 +15,7 @@ Two APIs:
   the whole document, moderately faster on large byte inputs.
 
 ```dart
-import 'package:simdjson/simdjson.dart';
+import 'package:simdjson_dart/simdjson_dart.dart';
 
 // Selective access: parse 9 MB, materialize three values.
 final doc = SimdJsonDocument.parseBytes(bytes);
