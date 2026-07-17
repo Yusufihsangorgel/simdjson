@@ -1,3 +1,5 @@
+![simdjson: fast JSON for Dart](doc/banner.png)
+
 # simdjson
 
 Fast JSON for Dart, powered by the [simdjson](https://simdjson.org) C++
@@ -34,6 +36,8 @@ final data = simdJsonDecodeBytes(bytes) as Map<String, dynamic>;
 Medians on an Apple Silicon MacBook (macOS arm64, Dart 3.11), synthetic
 workloads from `bench/bench.dart`. Baseline is `dart:convert` doing the
 same work, including reading the results (its maps materialize lazily).
+
+![benchmark](doc/bench.png)
 
 | Workload (6.7-9.2 MB) | Read 3 values | Full decode + read all |
 |---|---|---|
