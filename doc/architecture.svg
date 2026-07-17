@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="460" viewBox="0 0 1180 460" font-family="Menlo, monospace">
+  <defs>
+    <marker id="arw" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#38BDF8"/>
+    </marker>
+    <marker id="arwd" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#64748B"/>
+    </marker>
+  </defs>
+
+  <rect width="1180" height="460" fill="#0B1220"/>
+  <text x="48" y="52" font-size="26" font-weight="bold" fill="#E2E8F0">How simdjson_dart reads JSON</text>
+  <text x="48" y="82" font-size="15" fill="#94A3B8">Parse once in native simdjson, then materialize only the fields you read.</text>
+
+  <!-- Dart side box -->
+  <rect x="48" y="116" width="360" height="316" rx="12" fill="#0E1A2E" stroke="#1E3A5F" stroke-width="1.5"/>
+  <text x="72" y="146" font-size="14" fill="#64748B">DART</text>
+
+  <!-- lazy path (accent) -->
+  <rect x="72" y="166" width="312" height="66" rx="8" fill="#111C2E" stroke="#38BDF8" stroke-width="1.5"/>
+  <text x="88" y="194" font-size="15" fill="#E2E8F0">SimdJsonDocument.at(pointer)</text>
+  <text x="88" y="216" font-size="12.5" fill="#94A3B8">read only selected fields, lazy</text>
+
+  <!-- full decode path -->
+  <rect x="72" y="252" width="312" height="66" rx="8" fill="#111C2E" stroke="#1E3A5F" stroke-width="1.5"/>
+  <text x="88" y="280" font-size="15" fill="#E2E8F0">simdJsonDecodeBytes(bytes)</text>
+  <text x="88" y="302" font-size="12.5" fill="#94A3B8">decode the whole document</text>
+
+  <rect x="72" y="338" width="312" height="38" rx="8" fill="#0B1220" stroke="#1E3A5F" stroke-width="1.2"/>
+  <text x="88" y="362" font-size="12" fill="#64748B">doc.close() frees the native document</text>
+
+  <text x="72" y="404" font-size="12" fill="#64748B">Both paths share the same native parse.</text>
+
+  <!-- FFI boundary -->
+  <rect x="498" y="116" width="140" height="316" rx="12" fill="#0E1A2E" stroke="#1E3A5F" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="522" y="146" font-size="14" fill="#64748B">dart:ffi</text>
+  <text x="568" y="290" font-size="15" fill="#E2E8F0" text-anchor="middle" transform="rotate(-90 568 290)">C ABI shim (UTF-8 bytes)</text>
+
+  <!-- Native side box -->
+  <rect x="708" y="116" width="424" height="316" rx="12" fill="#0E1A2E" stroke="#1E3A5F" stroke-width="1.5"/>
+  <text x="732" y="146" font-size="14" fill="#64748B">NATIVE  ·  simdjson (vendored, build hooks)</text>
+
+  <!-- lazy outcome (accent) -->
+  <rect x="732" y="166" width="376" height="66" rx="8" fill="#111C2E" stroke="#38BDF8" stroke-width="1.5"/>
+  <text x="748" y="194" font-size="15" fill="#E2E8F0">SIMD parse, walk to the pointer</text>
+  <text x="748" y="216" font-size="12.5" fill="#94A3B8">skips most of the document</text>
+
+  <!-- full outcome -->
+  <rect x="732" y="252" width="376" height="66" rx="8" fill="#111C2E" stroke="#1E3A5F" stroke-width="1.5"/>
+  <text x="748" y="280" font-size="15" fill="#E2E8F0">SIMD parse the whole input</text>
+  <text x="748" y="302" font-size="12.5" fill="#94A3B8">build every value as a Dart object</text>
+
+  <rect x="732" y="338" width="376" height="80" rx="8" fill="#0B1220" stroke="#1E3A5F" stroke-width="1.2"/>
+  <text x="748" y="362" font-size="13.5" fill="#94A3B8">Skipped fields never become Dart objects, so</text>
+  <text x="748" y="382" font-size="13.5" fill="#94A3B8">selective reads hit multiple GB/s: 5 to 14x</text>
+  <text x="748" y="402" font-size="13.5" fill="#94A3B8">faster than a full decode on large payloads.</text>
+
+  <!-- arrows: lazy path (accent) -->
+  <path d="M384 199 L498 199" stroke="#38BDF8" stroke-width="2" fill="none" marker-end="url(#arw)"/>
+  <path d="M638 199 L732 199" stroke="#38BDF8" stroke-width="2" fill="none" marker-end="url(#arw)"/>
+
+  <!-- arrows: full decode path (dim) -->
+  <path d="M384 285 L498 285" stroke="#64748B" stroke-width="1.8" fill="none" marker-end="url(#arwd)"/>
+  <path d="M638 285 L732 285" stroke="#64748B" stroke-width="1.8" fill="none" marker-end="url(#arwd)"/>
+</svg>

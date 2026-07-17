@@ -31,6 +31,8 @@ try {
 final data = simdJsonDecodeBytes(bytes) as Map<String, dynamic>;
 ```
 
+![Diagram: the lazy SimdJsonDocument.at path reads only selected fields, while simdJsonDecodeBytes does a full decode; both cross dart:ffi into native simdjson](https://raw.githubusercontent.com/Yusufihsangorgel/simdjson_dart/main/doc/architecture.png)
+
 ## Performance, honestly
 
 Medians on an Apple Silicon MacBook (macOS arm64, Dart 3.11), synthetic
