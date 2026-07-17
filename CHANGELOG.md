@@ -1,3 +1,7 @@
+## 0.1.2
+
+- Docs: tightened the README and added an architecture diagram.
+
 ## 0.1.1
 
 - Rename the example file to match the package name so pub.dev picks it
