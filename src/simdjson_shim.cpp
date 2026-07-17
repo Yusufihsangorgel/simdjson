@@ -20,6 +20,14 @@
 #include <string>
 #include <vector>
 
+// MSVC exports nothing from a DLL by default; ELF/Mach-O may be built with
+// hidden visibility. Mark the C ABI entry points exported explicitly.
+#if defined(_WIN32)
+#define SJ_EXPORT __declspec(dllexport)
+#else
+#define SJ_EXPORT __attribute__((visibility("default")))
+#endif
+
 #include "third_party/simdjson/simdjson.h"
 
 namespace {
@@ -187,7 +195,7 @@ void fail_alloc(SjResult* result) {
   result->error_message = simdjson::error_message(simdjson::MEMALLOC);
 }
 
-void sj_parse(const uint8_t* json, uint64_t length, SjResult* result) {
+SJ_EXPORT void sj_parse(const uint8_t* json, uint64_t length, SjResult* result) {
   result->error_code = 0;
   result->error_message = nullptr;
   result->tape = nullptr;
@@ -226,7 +234,7 @@ void sj_parse(const uint8_t* json, uint64_t length, SjResult* result) {
   }
 }
 
-void sj_free(uint8_t* tape) { std::free(tape); }
+SJ_EXPORT void sj_free(uint8_t* tape) { std::free(tape); }
 
 // A parsed document held open for lazy, repeated access. The parser owns
 // the underlying tape, so it lives alongside the root element.
@@ -237,7 +245,7 @@ struct SjDocument {
 
 // Parses and keeps the document open. Returns null on error, with the
 // details in `result`.
-void* sj_open(const uint8_t* json, uint64_t length, SjResult* result) {
+SJ_EXPORT void* sj_open(const uint8_t* json, uint64_t length, SjResult* result) {
   result->error_code = 0;
   result->error_message = nullptr;
   result->tape = nullptr;
@@ -271,7 +279,7 @@ void* sj_open(const uint8_t* json, uint64_t length, SjResult* result) {
 // serializes just that subtree. error_code -1 means "path not found"
 // (missing field, index out of bounds, or a scalar in the middle of the
 // path), which callers surface as null rather than an error.
-void sj_at(void* handle, const uint8_t* pointer, uint64_t pointer_length,
+SJ_EXPORT void sj_at(void* handle, const uint8_t* pointer, uint64_t pointer_length,
            SjResult* result) {
   result->error_code = 0;
   result->error_message = nullptr;
@@ -313,6 +321,6 @@ void sj_at(void* handle, const uint8_t* pointer, uint64_t pointer_length,
   }
 }
 
-void sj_close(void* handle) { delete static_cast<SjDocument*>(handle); }
+SJ_EXPORT void sj_close(void* handle) { delete static_cast<SjDocument*>(handle); }
 
 }  // extern "C"
