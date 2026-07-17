@@ -1,65 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="460" viewBox="0 0 1180 460" font-family="Menlo, monospace">
-  <defs>
-    <marker id="arw" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L8,3 L0,6 Z" fill="#38BDF8"/>
-    </marker>
-    <marker id="arwd" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L8,3 L0,6 Z" fill="#64748B"/>
-    </marker>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="470" viewBox="0 0 1100 470" font-family="Menlo, monospace">
+  <rect width="1100" height="470" fill="#0B1220"/>
+  <text x="60" y="50" font-size="23" font-weight="bold" fill="#E2E8F0">Read the field you want, skip the rest</text>
+  <text x="60" y="76" font-size="14" fill="#94A3B8">A JSON Pointer walks native simdjson straight to one value. The bytes it steps over never become Dart objects.</text>
 
-  <rect width="1180" height="460" fill="#0B1220"/>
-  <text x="48" y="52" font-size="26" font-weight="bold" fill="#E2E8F0">How simdjson_dart reads JSON</text>
-  <text x="48" y="82" font-size="15" fill="#94A3B8">Parse once in native simdjson, then materialize only the fields you read.</text>
+  <!-- the JSON document, most of it dim, two fields lit -->
+  <rect x="60" y="110" width="560" height="320" rx="10" fill="#0E1A2E" stroke="#1E3A5F"/>
+  <g font-size="15">
+    <text x="84" y="146" fill="#334155">{</text>
+    <text x="104" y="176" fill="#334155">"id": 90421,</text>
+    <text x="104" y="204" fill="#334155">"meta": { "ts": 1720, "src": "api", ... },</text>
+    <text x="104" y="232" fill="#38BDF8">"user": { "name": </text><text x="316" y="232" fill="#38BDF8" font-weight="bold">"ada"</text><text x="372" y="232" fill="#38BDF8">, ... },</text>
+    <text x="104" y="260" fill="#334155">"items": [ { ... }, { ... }, { ... }, ... ],</text>
+    <text x="104" y="288" fill="#334155">"scores": [ 12, 44, 91, 7, 63, ... ],</text>
+    <text x="104" y="316" fill="#38BDF8">"total": </text><text x="196" y="316" fill="#38BDF8" font-weight="bold">1250</text><text x="230" y="316" fill="#38BDF8">,</text>
+    <text x="104" y="344" fill="#334155">"raw": "…8 KB of base64…",</text>
+    <text x="104" y="372" fill="#334155">"trace": [ ... ], "flags": { ... }</text>
+    <text x="84" y="400" fill="#334155">}</text>
+  </g>
 
-  <!-- Dart side box -->
-  <rect x="48" y="116" width="360" height="316" rx="12" fill="#0E1A2E" stroke="#1E3A5F" stroke-width="1.5"/>
-  <text x="72" y="146" font-size="14" fill="#64748B">DART</text>
+  <!-- pointer callouts to the lit fields -->
+  <path d="M700 232 L392 232" stroke="#38BDF8" stroke-width="1.5" fill="none" marker-end="url(#a)"/>
+  <path d="M700 316 L250 316" stroke="#38BDF8" stroke-width="1.5" fill="none" marker-end="url(#a)"/>
+  <defs><marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#38BDF8"/></marker></defs>
+  <rect x="700" y="212" width="330" height="40" rx="7" fill="#111C2E" stroke="#38BDF8"/><text x="716" y="237" font-size="14" fill="#E2E8F0">doc.at('/user/name').stringValue</text>
+  <rect x="700" y="296" width="330" height="40" rx="7" fill="#111C2E" stroke="#38BDF8"/><text x="716" y="321" font-size="14" fill="#E2E8F0">doc.at('/total').intValue</text>
 
-  <!-- lazy path (accent) -->
-  <rect x="72" y="166" width="312" height="66" rx="8" fill="#111C2E" stroke="#38BDF8" stroke-width="1.5"/>
-  <text x="88" y="194" font-size="15" fill="#E2E8F0">SimdJsonDocument.at(pointer)</text>
-  <text x="88" y="216" font-size="12.5" fill="#94A3B8">read only selected fields, lazy</text>
-
-  <!-- full decode path -->
-  <rect x="72" y="252" width="312" height="66" rx="8" fill="#111C2E" stroke="#1E3A5F" stroke-width="1.5"/>
-  <text x="88" y="280" font-size="15" fill="#E2E8F0">simdJsonDecodeBytes(bytes)</text>
-  <text x="88" y="302" font-size="12.5" fill="#94A3B8">decode the whole document</text>
-
-  <rect x="72" y="338" width="312" height="38" rx="8" fill="#0B1220" stroke="#1E3A5F" stroke-width="1.2"/>
-  <text x="88" y="362" font-size="12" fill="#64748B">doc.close() frees the native document</text>
-
-  <text x="72" y="404" font-size="12" fill="#64748B">Both paths share the same native parse.</text>
-
-  <!-- FFI boundary -->
-  <rect x="498" y="116" width="140" height="316" rx="12" fill="#0E1A2E" stroke="#1E3A5F" stroke-width="1.5" stroke-dasharray="5 4"/>
-  <text x="522" y="146" font-size="14" fill="#64748B">dart:ffi</text>
-  <text x="568" y="290" font-size="15" fill="#E2E8F0" text-anchor="middle" transform="rotate(-90 568 290)">C ABI shim (UTF-8 bytes)</text>
-
-  <!-- Native side box -->
-  <rect x="708" y="116" width="424" height="316" rx="12" fill="#0E1A2E" stroke="#1E3A5F" stroke-width="1.5"/>
-  <text x="732" y="146" font-size="14" fill="#64748B">NATIVE  ·  simdjson (vendored, build hooks)</text>
-
-  <!-- lazy outcome (accent) -->
-  <rect x="732" y="166" width="376" height="66" rx="8" fill="#111C2E" stroke="#38BDF8" stroke-width="1.5"/>
-  <text x="748" y="194" font-size="15" fill="#E2E8F0">SIMD parse, walk to the pointer</text>
-  <text x="748" y="216" font-size="12.5" fill="#94A3B8">skips most of the document</text>
-
-  <!-- full outcome -->
-  <rect x="732" y="252" width="376" height="66" rx="8" fill="#111C2E" stroke="#1E3A5F" stroke-width="1.5"/>
-  <text x="748" y="280" font-size="15" fill="#E2E8F0">SIMD parse the whole input</text>
-  <text x="748" y="302" font-size="12.5" fill="#94A3B8">build every value as a Dart object</text>
-
-  <rect x="732" y="338" width="376" height="80" rx="8" fill="#0B1220" stroke="#1E3A5F" stroke-width="1.2"/>
-  <text x="748" y="362" font-size="13.5" fill="#94A3B8">Skipped fields never become Dart objects, so</text>
-  <text x="748" y="382" font-size="13.5" fill="#94A3B8">selective reads hit multiple GB/s: 5 to 14x</text>
-  <text x="748" y="402" font-size="13.5" fill="#94A3B8">faster than a full decode on large payloads.</text>
-
-  <!-- arrows: lazy path (accent) -->
-  <path d="M384 199 L498 199" stroke="#38BDF8" stroke-width="2" fill="none" marker-end="url(#arw)"/>
-  <path d="M638 199 L732 199" stroke="#38BDF8" stroke-width="2" fill="none" marker-end="url(#arw)"/>
-
-  <!-- arrows: full decode path (dim) -->
-  <path d="M384 285 L498 285" stroke="#64748B" stroke-width="1.8" fill="none" marker-end="url(#arwd)"/>
-  <path d="M638 285 L732 285" stroke="#64748B" stroke-width="1.8" fill="none" marker-end="url(#arwd)"/>
+  <text x="700" y="384" font-size="13.5" fill="#94A3B8">items, scores, raw and trace are never</text>
+  <text x="700" y="404" font-size="13.5" fill="#94A3B8">parsed into Dart, so selective reads run</text>
+  <text x="700" y="424" font-size="13.5" fill="#94A3B8">5 to 14x faster than jsonDecode.</text>
+  <text x="60" y="452" font-size="12.5" fill="#64748B">simdjson is vendored and compiled by build hooks; simdJsonDecodeBytes is there when you do need the whole thing.</text>
 </svg>
