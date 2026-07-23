@@ -71,8 +71,12 @@ void main() {
   String row(String label, int ms, String note) =>
       '  ${label.padRight(22)}${'$ms ms'.padLeft(6)}   $note';
 
-  stdout.writeln(row('jsonDecode + index', withConvert, 'builds the whole tree'));
-  stdout.writeln(row('SimdJsonDocument.at', withSimd, 'reads only the 3 fields'));
+  stdout.writeln(
+    row('jsonDecode + index', withConvert, 'builds the whole tree'),
+  );
+  stdout.writeln(
+    row('SimdJsonDocument.at', withSimd, 'reads only the 3 fields'),
+  );
   stdout.writeln('');
   stdout.writeln('  ${(withConvert / withSimd).toStringAsFixed(1)}x faster');
 }

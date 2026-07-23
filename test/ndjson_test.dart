@@ -7,9 +7,9 @@ import 'package:test/test.dart';
 /// `dart:convert` is the oracle: decoding NDJSON line by line with jsonDecode
 /// must give exactly what the single native pass gives.
 List<Object?> lineByLine(String ndjson) => [
-      for (final line in const LineSplitter().convert(ndjson))
-        if (line.trim().isNotEmpty) jsonDecode(line),
-    ];
+  for (final line in const LineSplitter().convert(ndjson))
+    if (line.trim().isNotEmpty) jsonDecode(line),
+];
 
 void main() {
   test('decodes one value per line, in order', () {
@@ -73,13 +73,15 @@ void main() {
   test('a realistic log stream matches dart:convert line by line', () {
     final buffer = StringBuffer();
     for (var i = 0; i < 2000; i++) {
-      buffer.writeln(jsonEncode({
-        'ts': 1750000000 + i,
-        'level': i % 7 == 0 ? 'error' : 'info',
-        'msg': 'request $i handled',
-        'tags': ['http', if (i.isEven) 'cached'],
-        'latency_ms': i / 3,
-      }));
+      buffer.writeln(
+        jsonEncode({
+          'ts': 1750000000 + i,
+          'level': i % 7 == 0 ? 'error' : 'info',
+          'msg': 'request $i handled',
+          'tags': ['http', if (i.isEven) 'cached'],
+          'latency_ms': i / 3,
+        }),
+      );
     }
     final ndjson = buffer.toString();
     final rows = simdJsonDecodeNdjson(ndjson);

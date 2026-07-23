@@ -41,7 +41,9 @@ void main() {
   // where it wins; reach for a full decode when you need most of the document.
   // That path is jsonDecode-compatible:
   final decoded = simdJsonDecodeBytes(bytes) as Map<String, Object?>;
-  print('full-decode item count: ${(decoded['items'] as List).length}'); // 50000
+  print(
+    'full-decode item count: ${(decoded['items'] as List).length}',
+  ); // 50000
 
   // Invalid JSON fails loudly, not silently: parse throws a FormatException so
   // bad input never turns into a wrong value.

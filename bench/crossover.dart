@@ -27,14 +27,14 @@ Uint8List _payload(int targetBytes) {
   final records = (targetBytes / 90).ceil();
   for (var i = 0; i < records; i++) {
     if (i > 0) items.write(',');
-    items.write('{"id":$i,"name":"item-$i","price":${(i * 3) % 1000}.99,'
-        '"active":${i.isEven},"tags":["a","b"]}');
+    items.write(
+      '{"id":$i,"name":"item-$i","price":${(i * 3) % 1000}.99,'
+      '"active":${i.isEven},"tags":["a","b"]}',
+    );
     count++;
   }
   items.write(']}');
-  final json = items
-      .toString()
-      .replaceFirst('"total":0', '"total":$count');
+  final json = items.toString().replaceFirst('"total":0', '"total":$count');
   return Uint8List.fromList(utf8.encode(json));
 }
 
@@ -65,10 +65,14 @@ void main() {
     4 * 1024 * 1024,
   ];
 
-  print('Median ms to read 2 fields out of the payload. Both engines read the '
-      'same fields.\n');
-  print('${'payload'.padRight(10)}${'jsonDecode'.padRight(13)}'
-      '${'simd .at'.padRight(11)}winner');
+  print(
+    'Median ms to read 2 fields out of the payload. Both engines read the '
+    'same fields.\n',
+  );
+  print(
+    '${'payload'.padRight(10)}${'jsonDecode'.padRight(13)}'
+    '${'simd .at'.padRight(11)}winner',
+  );
   print('-' * 45);
 
   for (final size in sizes) {
@@ -102,14 +106,18 @@ void main() {
         ? 'simd ${ratio.toStringAsFixed(1)}x'
         : 'dart:convert ${(simd / convert).toStringAsFixed(1)}x';
 
-    print('${_human(size).padRight(10)}'
-        '${convert.toStringAsFixed(3).padRight(13)}'
-        '${simd.toStringAsFixed(3).padRight(11)}$winner');
+    print(
+      '${_human(size).padRight(10)}'
+      '${convert.toStringAsFixed(3).padRight(13)}'
+      '${simd.toStringAsFixed(3).padRight(11)}$winner',
+    );
   }
 
-  print('\nThe crossover is where simd .at overtakes jsonDecode. Below it the '
-      'FFI\ncost dominates and dart:convert wins; above it simdjson pulls away, '
-      'because\nit never turns the fields you skip into Dart objects.');
+  print(
+    '\nThe crossover is where simd .at overtakes jsonDecode. Below it the '
+    'FFI\ncost dominates and dart:convert wins; above it simdjson pulls away, '
+    'because\nit never turns the fields you skip into Dart objects.',
+  );
 }
 
 String _human(int bytes) {
